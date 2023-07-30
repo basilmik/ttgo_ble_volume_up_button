@@ -79,13 +79,12 @@ void setup() {
   ttgo->openBL();
 
   tft = ttgo->tft;
-  tft->fillScreen(TFT_RED);
-  delay(30);
+
   tft->fillScreen(TFT_BLACK);
+  tft->drawRect(110, 110, 20, 20, TFT_RED);
   tft->setTextColor(TFT_WHITE);
   tft->setTextSize(4);
-
-  //mkeys->draw(tft);
+  
   Serial.print("draw done");
   Serial.println("Starting BLE work!");
 
@@ -103,6 +102,7 @@ bool is_updated = false;
 void update_draw()
 {
   tft->fillScreen(TFT_BLACK);
+  tft->fillRect(110, 110, 20, 20, TFT_RED);
   is_updated = true;
 }
 
@@ -114,11 +114,14 @@ void loop() {
   {
     if (!is_updated)
     {
+      Serial.println("update draw");
       update_draw();
+      
     }
 
     if (ttgo->getTouch(x, y))
     {
+      Serial.println("got touch");
       while (ttgo->getTouch(x, y)) // wait for user to release
       {
         if (!is_circle_drawn)
@@ -131,6 +134,7 @@ void loop() {
       }
       kb->write(KEY_MEDIA_VOLUME_UP);
       tft->drawCircle(sx, sy, 80, TFT_BLACK);
+      tft->fillRect(110, 110, 20, 20, TFT_RED);
       is_circle_drawn = false;   
 
     }
